@@ -45,12 +45,21 @@ public class ApiController {
 
     @PostMapping("/generatedName")
     public ResponseEntity generate(@RequestParam String letter) {
+        if (letter.isBlank()) {
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(null);
+        }
+        if (letter.length() > 1) {
+            letter = Character.toString(letter.charAt(letter.length() - 1));
+        }
         Bigram bigram = bigramRepository.findMaxFrequencyByLetter(letter);
         return new ResponseEntity(bigram.getLetters(), HttpStatus.OK);
     }
 
     @PostMapping("/nextMaxLetter")
     public ResponseEntity nextMaxFrequencyLetter(@RequestParam String letter) {
+        if (letter.isBlank()) {
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(null);
+        }
         List<DtoBigram> bigramList = bigramRepository.findFiveMaxFrequencyByLetter(letter)
                 .stream().map(BigramMapper::mapper)
                 .collect(Collectors.toList());
@@ -59,6 +68,9 @@ public class ApiController {
 
     @PostMapping("/nextMinLetter")
     public ResponseEntity nextMinFrequencyLetter(@RequestParam String letter) {
+        if (letter.isBlank()) {
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(null);
+        }
         List<DtoBigram> bigramList = bigramRepository.findFiveMinFrequencyByLetter(letter)
                 .stream().map(BigramMapper::mapper)
                 .collect(Collectors.toList());
