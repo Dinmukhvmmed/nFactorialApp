@@ -1,0 +1,3 @@
+CREATE DATABASE nfactorial_app
+CHARACTER SET utf8
+COLLATE utf8_general_ci
